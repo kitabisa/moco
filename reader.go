@@ -22,7 +22,7 @@ type FailRecord struct {
 }
 
 type reader struct {
-	filename           string
+	ioReader           io.Reader
 	parser             Parser
 	bankType           string
 	mutations          []MutationBank
@@ -30,14 +30,14 @@ type reader struct {
 }
 
 type Reader interface {
-	ReadMutation(ioHandler io.Reader) error
+	ReadMutation() error
 	GetSuccess() []MutationBank
 	GetFail() []FailRecord
 }
 
-func NewReader(filename string, bankType string) Reader {
+func NewReader(ioReader io.Reader, bankType string) Reader {
 	return &reader{
-		filename: filename,
+		ioReader: ioReader,
 		parser:   NewParser(bankType),
 		bankType: bankType,
 	}
@@ -76,8 +76,8 @@ func (mr *reader) getHash(s string) string {
 	return fmt.Sprintf("%x", md5.Sum(data))
 }
 
-func (mr *reader) ReadMutation(ioHandler io.Reader) error {
-	scanner := bufio.NewScanner(ioHandler)
+func (mr *reader) ReadMutation() error {
+	scanner := bufio.NewScanner(mr.ioReader)
 	for scanner.Scan() {
 		textIn := scanner.Text()
 		ioReader := strings.NewReader(textIn)
