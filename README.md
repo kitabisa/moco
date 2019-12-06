@@ -11,6 +11,11 @@ $ go get github.com/kitabisa/moco
 ## How to use
 
 ```go
+
+import (
+	moco "github.com/kitabisa/moco"
+)
+
 //Open file
 f, err := os.Open("/dir/to/filename.csv")
 if err != nil {
