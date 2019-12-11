@@ -23,7 +23,7 @@ type bcaParser struct {
 	isCredit    bool
 }
 
-func (p *bcaParser) ParseRecord() error {
+func (p *bcaParser) parseRecord() error {
 	a := p.record[BcaIndexNumberAmount]
 	if !p.isCreditLedger(a) {
 		return fmt.Errorf("%s", "Not a Credit ledger")
@@ -122,7 +122,7 @@ func (p *bcaParser) GetAccountNumber() string {
 
 func (p *bcaParser) LoadRecord(record []string) error {
 	p.record = record
-	return p.ParseRecord()
+	return p.parseRecord()
 }
 
 func (p *bcaParser) GetDescription() string {

@@ -16,7 +16,7 @@ type briParser struct {
 	date          string
 }
 
-func (p *briParser) ParseRecord() error {
+func (p *briParser) parseRecord() error {
 	d := p.record[BriIndexNumberDescription]
 	p.description = d
 	ns := WhitespaceSplit(d)
@@ -51,7 +51,7 @@ func (p *briParser) GetAccountNumber() string {
 
 func (p *briParser) LoadRecord(record []string) error {
 	p.record = record
-	return p.ParseRecord()
+	return p.parseRecord()
 }
 
 func (p *briParser) GetDescription() string {

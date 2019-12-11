@@ -51,6 +51,11 @@ func NewParser(bankName string) Parser {
 			mutationParser: NewBriParser(),
 		}
 	}
+	if bankName == BankBNI {
+		return &parser{
+			mutationParser: NewBniParser(),
+		}
+	}
 
 	return nil
 }
