@@ -14,7 +14,7 @@ func WhitespaceSplit(s string) []string {
 func BlacklistTrim(ar, blacklist []string) []string {
 
 	var trimmed []string
-	var found = false
+	var found bool
 
 	for _, v := range ar {
 		found = false
