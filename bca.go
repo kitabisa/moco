@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-var BCABlacklist = []string{"TRSF", "E-BANKING", "CR", "DB", "Wallet", "User", "BIAYA", "SME", "MFTS"}
+var BCABlacklist = []string{"TRSF", "E-BANKING", "CR", "DB", "Wallet", "User", "BIAYA", "SME", "MFTS", "Dana", "YAY", "KITA", "BISA"}
 
 const (
 	BcaIndexNumberDescription = 1
@@ -59,7 +59,7 @@ func (p *bcaParser) parseTransferDate(s string) string {
 }
 
 func (p *bcaParser) isTransferCode(s string) bool {
-	match, err := regexp.MatchString("[0-9]+\\/[A-Z]+\\/[0-9]*$", s)
+	match, err := regexp.MatchString("[0-9]+\\/[A-Z]+\\/[A-Z0-9]*$", s)
 	if err != nil {
 		return false
 	}
@@ -69,6 +69,15 @@ func (p *bcaParser) isTransferCode(s string) bool {
 
 func (p *bcaParser) isAllNumber(s string) bool {
 	match, err := regexp.MatchString("^[0-9]*$", s)
+	if err != nil {
+		return false
+	}
+
+	return match
+}
+
+func (p *bcaParser) isAmount(s string) bool {
+	match, err := regexp.MatchString("^[0-9]*.00", s)
 	if err != nil {
 		return false
 	}
@@ -89,7 +98,7 @@ func (p *bcaParser) parseAccountName(s string) string {
 			continue
 		}
 
-		if p.isAllNumber(v) {
+		if p.isAllNumber(v) || p.isAmount(v) {
 			continue
 		}
 
