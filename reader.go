@@ -13,6 +13,7 @@ const (
 	BankMandiri = "mandiri"
 	BankBCA     = "bca"
 	BankBRI     = "bri"
+	BankBNI     = "bni"
 )
 
 type FailRecord struct {
@@ -90,7 +91,6 @@ func (mr *reader) ReadMutation() error {
 			if err == nil {
 				mutation, err := mr.recordToMutation(rec)
 				if mutation != nil {
-
 					mr.appendToSuccessRecord(mutation)
 				} else {
 					mr.appendToErrorRecord(textIn, err)

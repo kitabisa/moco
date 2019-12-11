@@ -20,7 +20,7 @@ type mandiriParser struct {
 	date        string
 }
 
-func (p *mandiriParser) ParseRecord() error {
+func (p *mandiriParser) parseRecord() error {
 	p.description = p.record[MandiriIndexNumberDescription]
 	p.accountName = p.parseAccountName(p.description)
 	p.amount = p.record[MandiriIndexNumberAmount]
@@ -50,7 +50,7 @@ func (p *mandiriParser) GetAccountNumber() string {
 
 func (p *mandiriParser) LoadRecord(record []string) error {
 	p.record = record
-	return p.ParseRecord()
+	return p.parseRecord()
 }
 
 func (p *mandiriParser) GetDescription() string {
