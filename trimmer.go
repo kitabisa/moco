@@ -11,7 +11,7 @@ func WhitespaceSplit(s string) []string {
 	return r.FindAllString(s, -1)
 }
 
-func BlacklistTrim(ar []string, blacklist []string) []string {
+func BlacklistTrim(ar, blacklist []string) []string {
 
 	var trimmed []string
 	var found = false
