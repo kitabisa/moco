@@ -49,6 +49,13 @@ func (suite *ReaderTestSuite) TestGetFail() {
 	assert.Equal(suite.T(), 0, len(failures), "Failure records is not empty")
 }
 
+func (suite *ReaderTestSuite) TestGetRaw() {
+	err := suite.reader.ReadMutation()
+	raws := suite.reader.GetRaw()
+	assert.Nil(suite.T(), err, "Error should be nil")
+	assert.Equal(suite.T(), 1, len(raws), "Raw records is empty")
+}
+
 func TestReaderTestSuite(t *testing.T) {
 	suite.Run(t, new(ReaderTestSuite))
 }
