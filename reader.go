@@ -22,18 +22,25 @@ type FailRecord struct {
 	Err  error
 }
 
+type RawRecord struct {
+	Raw  string
+	Hash string
+}
+
 type reader struct {
 	ioReader           io.Reader
 	parser             Parser
 	bankType           string
 	mutations          []MutationBank
 	unrecognizedRecord []FailRecord
+	rawRecords         []RawRecord
 }
 
 type Reader interface {
 	ReadMutation() error
 	GetSuccess() []MutationBank
 	GetFail() []FailRecord
+	GetRaw() []RawRecord
 }
 
 func NewReader(ioReader io.Reader, bankType string) Reader {
@@ -81,6 +88,7 @@ func (mr *reader) ReadMutation() error {
 	scanner := bufio.NewScanner(mr.ioReader)
 	for scanner.Scan() {
 		textIn := scanner.Text()
+		mr.appendToRawRecord(textIn)
 		ioReader := strings.NewReader(textIn)
 		csvReader := NewCsvReader(ioReader, ',')
 		for {
@@ -121,10 +129,22 @@ func (mr *reader) appendToErrorRecord(s string, err error) {
 	mr.unrecognizedRecord = append(mr.unrecognizedRecord, *ur)
 }
 
+func (mr *reader) appendToRawRecord(s string) {
+	ur := new(RawRecord)
+	ur.Raw = s
+	ur.Hash = mr.getHash(s)
+
+	mr.rawRecords = append(mr.rawRecords, *ur)
+}
+
 func (mr *reader) GetSuccess() []MutationBank {
 	return mr.mutations
 }
 
 func (mr *reader) GetFail() []FailRecord {
 	return mr.unrecognizedRecord
+}
+
+func (mr *reader) GetRaw() []RawRecord {
+	return mr.rawRecords
 }
