@@ -9,17 +9,24 @@ import (
 
 type BniMutationTestSuite struct {
 	suite.Suite
-	parser         MutationParser
-	BniMutationRec []string
+	parser                MutationParser
+	BniMutationRec        []string
+	InvalidBniMutationRec []string
 }
 
 func (suite *BniMutationTestSuite) SetupTest() {
 	suite.BniMutationRec = []string{"02/12/19 06.25.21", "02/12/19 06.25.21", "0996", "932902", "TRANSFER DARI   | Sdr JOHN DOE", ".00", "200,000.00"}
+	suite.InvalidBniMutationRec = []string{"test", "invalid", "record"}
 	suite.parser = NewBniParser()
 }
 
 func (suite *BniMutationTestSuite) TestLoadRecord() {
 	err := suite.parser.LoadRecord(suite.BniMutationRec)
+	assert.Nil(suite.T(), err, "Error should be nil")
+}
+
+func (suite *BniMutationTestSuite) TestLoadRecordInvalid() {
+	err := suite.parser.LoadRecord(suite.InvalidBniMutationRec)
 	assert.Nil(suite.T(), err, "Error should be nil")
 }
 

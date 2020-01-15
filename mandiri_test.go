@@ -9,12 +9,14 @@ import (
 
 type MandiriMutationTestSuite struct {
 	suite.Suite
-	parser             MutationParser
-	MandiriMutationRec []string
+	parser                    MutationParser
+	MandiriMutationRec        []string
+	InvalidMandiriMutationRec []string
 }
 
 func (suite *MandiriMutationTestSuite) SetupTest() {
 	suite.MandiriMutationRec = []string{"1270010264453", "25/11/19", "25/11/19", "2315", "SA OB CA No Book  DARI INDAH FEBRIANTY", "DONASI PT KITA BISA ", "", ".00", "350,000.00", ""}
+	suite.InvalidMandiriMutationRec = []string{"test", "invalid"}
 	suite.parser = NewMandiriParser()
 }
 
