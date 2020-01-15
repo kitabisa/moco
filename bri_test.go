@@ -9,17 +9,24 @@ import (
 
 type BriMutationTestSuite struct {
 	suite.Suite
-	parser         MutationParser
-	BriMutationRec []string
+	parser                MutationParser
+	BriMutationRec        []string
+	InvalidBriMutationRec []string
 }
 
 func (suite *BriMutationTestSuite) SetupTest() {
 	suite.BriMutationRec = []string{"DATE", "TIME", "REMARK", "DEBET", "CREDIT", "TELLER ID", "26/11/19", "03:42:14", "DARI 020601084702507 KE  038501000860307", "0.00", "500,000.00", "1,438,000.00", "DDRAZN1"}
+	suite.InvalidBriMutationRec = []string{"test", "invalid", "record"}
 	suite.parser = NewBriParser()
 }
 
 func (suite *BriMutationTestSuite) TestLoadRecord() {
 	err := suite.parser.LoadRecord(suite.BriMutationRec)
+	assert.Nil(suite.T(), err, "Error should be nil")
+}
+
+func (suite *BriMutationTestSuite) TestLoadRecordInvalid() {
+	err := suite.parser.LoadRecord(suite.InvalidBriMutationRec)
 	assert.Nil(suite.T(), err, "Error should be nil")
 }
 

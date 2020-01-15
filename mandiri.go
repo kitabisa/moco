@@ -5,6 +5,7 @@ import (
 )
 
 const (
+	MandiriMinimumRecordLength       = 5
 	MandiriIndexNumberDescription    = 4
 	MandiriIndexNumberValidationDate = 2
 	MandiriIndexNumberAmount         = 8
@@ -18,6 +19,10 @@ type mandiriParser struct {
 	description string
 	amount      string
 	date        string
+}
+
+func (p *mandiriParser) validRecordLength() bool {
+	return len(p.record) >= MandiriMinimumRecordLength
 }
 
 func (p *mandiriParser) parseRecord() error {
@@ -50,6 +55,9 @@ func (p *mandiriParser) GetAccountNumber() string {
 
 func (p *mandiriParser) LoadRecord(record []string) error {
 	p.record = record
+	if !p.validRecordLength() {
+		return nil
+	}
 	return p.parseRecord()
 }
 
