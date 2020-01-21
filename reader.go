@@ -44,9 +44,13 @@ type Reader interface {
 }
 
 func NewReader(ioReader io.Reader, bankType string) Reader {
+	parser := NewParser(bankType)
+	if parser == nil {
+		return nil
+	}
 	return &reader{
 		ioReader: ioReader,
-		parser:   NewParser(bankType),
+		parser:   parser,
 		bankType: bankType,
 	}
 }
