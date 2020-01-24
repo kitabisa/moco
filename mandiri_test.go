@@ -9,14 +9,16 @@ import (
 
 type MandiriMutationTestSuite struct {
 	suite.Suite
-	parser                    MutationParser
-	MandiriMutationRec        []string
-	InvalidMandiriMutationRec []string
+	parser                              MutationParser
+	MandiriMutationRec                  []string
+	MandiriMutationRecWithAccountNumber []string
+	InvalidMandiriMutationRec           []string
 }
 
 func (suite *MandiriMutationTestSuite) SetupTest() {
 	suite.MandiriMutationRec = []string{"1270010264453", "25/11/19", "25/11/19", "2315", "SA OB CA No Book  DARI INDAH FEBRIANTY", "DONASI PT KITA BISA ", "", ".00", "350,000.00", ""}
 	suite.InvalidMandiriMutationRec = []string{"test", "invalid"}
+	suite.MandiriMutationRecWithAccountNumber = []string{"1270010264453", "25/11/19", "25/11/19", "2315", "Transfer Otomatis", "DARI  9000006726914 KE  1270010264453 ", "", ".00", "100,000.00", ""}
 	suite.parser = NewMandiriParser()
 }
 
@@ -34,11 +36,11 @@ func (suite *MandiriMutationTestSuite) TestGetAccountName() {
 }
 
 func (suite *MandiriMutationTestSuite) TestGetAccountNumber() {
-	err := suite.parser.LoadRecord(suite.MandiriMutationRec)
+	err := suite.parser.LoadRecord(suite.MandiriMutationRecWithAccountNumber)
 	v := suite.parser.GetAccountNumber()
 
 	assert.Nil(suite.T(), err, "Error should be nil")
-	assert.Equal(suite.T(), "", v, "Account number is not empty")
+	assert.Equal(suite.T(), "9000006726914", v, "Account number is empty")
 }
 
 func (suite *MandiriMutationTestSuite) TestGetAmount() {
