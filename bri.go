@@ -55,6 +55,7 @@ func (p *briParser) GetAccountNumber() string {
 }
 
 func (p *briParser) LoadRecord(record []string) error {
+	p.cleanUp()
 	p.record = record
 	if !p.validRecordLength() {
 		return nil
@@ -78,4 +79,11 @@ func (p *briParser) GetAmount() string {
 
 func (p *briParser) GetDate() string {
 	return p.date
+}
+
+func (p *briParser) cleanUp() {
+	p.accountNumber = ""
+	p.description = ""
+	p.amount = ""
+	p.date = ""
 }
