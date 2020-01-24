@@ -60,6 +60,7 @@ func (p *bniParser) GetAccountNumber() string {
 }
 
 func (p *bniParser) LoadRecord(record []string) error {
+	p.cleanUp()
 	p.record = record
 	if !p.validRecordLength() {
 		return nil
@@ -93,4 +94,11 @@ func (p *bniParser) parseDate(s string) string {
 	}
 
 	return ""
+}
+
+func (p *bniParser) cleanUp() {
+	p.accountName = ""
+	p.description = ""
+	p.amount = ""
+	p.date = ""
 }

@@ -99,6 +99,7 @@ func (p *mandiriParser) GetAccountNumber() string {
 }
 
 func (p *mandiriParser) LoadRecord(record []string) error {
+	p.cleanUp()
 	p.record = record
 	if !p.validRecordLength() {
 		return nil
@@ -122,4 +123,12 @@ func (p *mandiriParser) GetAmount() string {
 
 func (p *mandiriParser) GetDate() string {
 	return p.date
+}
+
+func (p *mandiriParser) cleanUp() {
+	p.accountNumber = ""
+	p.accountName = ""
+	p.description = ""
+	p.amount = ""
+	p.date = ""
 }
