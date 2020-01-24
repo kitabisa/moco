@@ -66,6 +66,10 @@ func MockNewParser(rec []string) Parser {
 	}
 }
 
+func MockNewParserNil() Parser {
+	return nil
+}
+
 func (suite *ParserTestSuite) SetupTest() {
 	suite.parser = MockNewParser([]string{})
 }
@@ -74,6 +78,12 @@ func (suite *ParserTestSuite) TestLoadRecord() {
 	err := suite.parser.LoadRecord([]string{})
 
 	assert.Nil(suite.T(), err, "Error should be nil")
+}
+
+func (suite *ParserTestSuite) TestParserNil() {
+	suite.parser = MockNewParserNil()
+
+	assert.Nil(suite.T(), suite.parser, "Parser should be nil")
 }
 
 func (suite *ParserTestSuite) TestGetMutation() {

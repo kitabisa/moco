@@ -23,10 +23,20 @@ func MockNewReader(f io.Reader, s string, rec []string) Reader {
 	}
 }
 
+func MockNewReaderNil() Reader {
+	return nil
+}
+
 func (suite *ReaderTestSuite) SetupTest() {
 	suite.mockText = "some,string,to,test"
 	ioReader := strings.NewReader(suite.mockText)
 	suite.reader = MockNewReader(ioReader, "some-bank", strings.Split(suite.mockText, ","))
+}
+
+func (suite *ReaderTestSuite) TestReaderNil() {
+	reader := MockNewReaderNil()
+
+	assert.Nil(suite.T(), reader, "reader should be nil")
 }
 
 func (suite *ReaderTestSuite) TestRead() {

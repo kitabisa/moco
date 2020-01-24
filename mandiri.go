@@ -1,15 +1,15 @@
 package moco
 
 import (
-	"regexp"
 	"strings"
 )
 
 const (
-	MandiriIndexNumberDescription       = 4
+	MandiriMinimumRecordLength       = 5
 	MandiriIndexNumberSecondDescription = 5
-	MandiriIndexNumberValidationDate    = 2
-	MandiriIndexNumberAmount            = 8
+	MandiriIndexNumberDescription    = 4
+	MandiriIndexNumberValidationDate = 2
+	MandiriIndexNumberAmount         = 8
 )
 
 var MandiriBlacklist = []string{"SA", "OB", "CA", "No", "Book", "DARI", "Transfer", "Otomatis", "KE"}
@@ -23,13 +23,8 @@ type mandiriParser struct {
 	date          string
 }
 
-func (p *mandiriParser) isContainAccountNumber(s string) bool {
-	match, err := regexp.MatchString("^\\bDARI\\b\\s*[0-9]+\\s*\\bKE\\b\\s*[0-9]+", s)
-	if err != nil {
-		return false
-	}
-
-	return match
+func (p *mandiriParser) validRecordLength() bool {
+	return len(p.record) >= MandiriMinimumRecordLength
 }
 
 func (p *mandiriParser) parseRecord() error {
@@ -95,6 +90,9 @@ func (p *mandiriParser) GetAccountNumber() string {
 
 func (p *mandiriParser) LoadRecord(record []string) error {
 	p.record = record
+	if !p.validRecordLength() {
+		return nil
+	}
 	return p.parseRecord()
 }
 

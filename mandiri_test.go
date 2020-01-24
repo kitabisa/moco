@@ -12,10 +12,12 @@ type MandiriMutationTestSuite struct {
 	parser                              MutationParser
 	MandiriMutationRec                  []string
 	MandiriMutationRecWithAccountNumber []string
+	InvalidMandiriMutationRec []string
 }
 
 func (suite *MandiriMutationTestSuite) SetupTest() {
 	suite.MandiriMutationRec = []string{"1270010264453", "25/11/19", "25/11/19", "2315", "SA OB CA No Book  DARI INDAH FEBRIANTY", "DONASI PT KITA BISA ", "", ".00", "350,000.00", ""}
+	suite.InvalidMandiriMutationRec = []string{"test", "invalid"}
 	suite.MandiriMutationRecWithAccountNumber = []string{"1270010264453", "25/11/19", "25/11/19", "2315", "Transfer Otomatis", "DARI  9000006726914 KE  1270010264453 ", "", ".00", "100,000.00", ""}
 	suite.parser = NewMandiriParser()
 }

@@ -9,17 +9,24 @@ import (
 
 type BcaMutationTestSuite struct {
 	suite.Suite
-	parser         MutationParser
-	BcaMutationRec []string
+	parser                MutationParser
+	BcaMutationRec        []string
+	InvalidBcaMutationRec []string
 }
 
 func (suite *BcaMutationTestSuite) SetupTest() {
 	suite.BcaMutationRec = []string{"PEND", "TRSF E-BANKING CR 2711/ADSCY/0000100 19112700651710  Lesman Buulolo Wallet User  ", "0498", "100,000.00 CR", "585,000.00"}
+	suite.InvalidBcaMutationRec = []string{"test"}
 	suite.parser = NewBcaParser()
 }
 
 func (suite *BcaMutationTestSuite) TestLoadRecord() {
 	err := suite.parser.LoadRecord(suite.BcaMutationRec)
+	assert.Nil(suite.T(), err, "Error should be nil")
+}
+
+func (suite *BcaMutationTestSuite) TestLoadRecordInvalid() {
+	err := suite.parser.LoadRecord(suite.InvalidBcaMutationRec)
 	assert.Nil(suite.T(), err, "Error should be nil")
 }
 

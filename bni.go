@@ -5,6 +5,7 @@ import (
 )
 
 const (
+	BniMinimumRecordLength       = 5
 	BniIndexNumberDescription    = 4
 	BniIndexNumberValidationDate = 0
 	BniIndexNumberAmount         = 6
@@ -18,6 +19,10 @@ type bniParser struct {
 	description string
 	amount      string
 	date        string
+}
+
+func (p *bniParser) validRecordLength() bool {
+	return len(p.record) >= BniMinimumRecordLength
 }
 
 func (p *bniParser) parseRecord() error {
@@ -56,6 +61,10 @@ func (p *bniParser) GetAccountNumber() string {
 
 func (p *bniParser) LoadRecord(record []string) error {
 	p.record = record
+	if !p.validRecordLength() {
+		return nil
+	}
+
 	return p.parseRecord()
 }
 

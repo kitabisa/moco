@@ -1,6 +1,7 @@
 package moco
 
 const (
+	BriMinimumRecordLength       = 9
 	BriIndexNumberDescription    = 8
 	BriIndexNumberValidationDate = 6
 	BriIndexNumberAmount         = 10
@@ -14,6 +15,10 @@ type briParser struct {
 	description   string
 	amount        string
 	date          string
+}
+
+func (p *briParser) validRecordLength() bool {
+	return len(p.record) >= BriMinimumRecordLength
 }
 
 func (p *briParser) parseRecord() error {
@@ -51,6 +56,9 @@ func (p *briParser) GetAccountNumber() string {
 
 func (p *briParser) LoadRecord(record []string) error {
 	p.record = record
+	if !p.validRecordLength() {
+		return nil
+	}
 	return p.parseRecord()
 }
 

@@ -1,7 +1,6 @@
 package moco
 
 import (
-	"fmt"
 	"regexp"
 	"strings"
 )
@@ -9,6 +8,7 @@ import (
 var BCABlacklist = []string{"TRSF", "E-BANKING", "CR", "DB", "Wallet", "User", "BIAYA", "SME", "MFTS", "Dana", "YAY", "KITA", "BISA"}
 
 const (
+	BcaMinimumRecordLength    = 2
 	BcaIndexNumberDescription = 1
 	BcaIndexNumberAmount      = 3
 	BcaAmountCreditString     = "CR"
@@ -23,10 +23,14 @@ type bcaParser struct {
 	isCredit    bool
 }
 
+func (p *bcaParser) validRecordLength() bool {
+	return len(p.record) >= BcaMinimumRecordLength
+}
+
 func (p *bcaParser) parseRecord() error {
 	a := p.record[BcaIndexNumberAmount]
 	if !p.isCreditLedger(a) {
-		return fmt.Errorf("%s", "Not a Credit ledger")
+		return nil
 	}
 	d := p.record[BcaIndexNumberDescription]
 	p.description = d
@@ -122,6 +126,10 @@ func (p *bcaParser) GetAccountNumber() string {
 
 func (p *bcaParser) LoadRecord(record []string) error {
 	p.record = record
+	if !p.validRecordLength() {
+		return nil
+	}
+
 	return p.parseRecord()
 }
 
