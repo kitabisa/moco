@@ -12,7 +12,7 @@ type MandiriMutationTestSuite struct {
 	parser                              MutationParser
 	MandiriMutationRec                  []string
 	MandiriMutationRecWithAccountNumber []string
-	InvalidMandiriMutationRec []string
+	InvalidMandiriMutationRec           []string
 }
 
 func (suite *MandiriMutationTestSuite) SetupTest() {
