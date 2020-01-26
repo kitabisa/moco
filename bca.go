@@ -5,7 +5,9 @@ import (
 	"strings"
 )
 
-var BCABlacklist = []string{"TRSF", "E-BANKING", "CR", "DB", "Wallet", "User", "BIAYA", "SME", "MFTS", "Dana", "YAY", "KITA", "BISA"}
+var BCABlacklist = []string{"TRSF", "E-BANKING", "CR", "DB", "Wallet",
+	"User", "BIAYA", "SME", "MFTS", "Dana", "YAY", "KITA", "BISA", "Recurring",
+	"Auto", "Debet"}
 
 const (
 	BcaMinimumRecordLength    = 2

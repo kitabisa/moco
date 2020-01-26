@@ -13,7 +13,10 @@ const (
 	MandiriIndexNumberAmount            = 8
 )
 
-var MandiriBlacklist = []string{"SA", "OB", "CA", "No", "Book", "DARI", "Transfer", "Otomatis", "KE"}
+var MandiriBlacklist = []string{
+	"SA", "OB", "CA", "No", "Book", "DARI", "Transfer",
+	"Otomatis", "KE", "MCM", "InhouseTrf", "KITA", "BISA",
+	"Auto", "Overbooking"}
 
 type mandiriParser struct {
 	record        []string
@@ -49,7 +52,7 @@ func (p *mandiriParser) parseRecord() error {
 	}
 
 	p.description = desc
-	p.amount = p.record[MandiriIndexNumberAmount]
+	p.amount = p.parseAmount(p.record[MandiriIndexNumberAmount])
 	p.date = p.record[MandiriIndexNumberValidationDate]
 
 	return nil
@@ -86,6 +89,16 @@ func (p *mandiriParser) parseAccountNumber(s string) string {
 	return ""
 }
 
+func (p *mandiriParser) parseAmount(s string) string {
+	a, err := NumericTrim(s)
+
+	if err != nil {
+		return ""
+	}
+
+	return a
+}
+
 func NewMandiriParser() MutationParser {
 	return &mandiriParser{}
 }
@@ -112,13 +125,7 @@ func (p *mandiriParser) GetDescription() string {
 }
 
 func (p *mandiriParser) GetAmount() string {
-	a, err := NumericTrim(p.amount)
-
-	if err != nil {
-		return ""
-	}
-
-	return a
+	return p.amount
 }
 
 func (p *mandiriParser) GetDate() string {
