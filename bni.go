@@ -1,6 +1,7 @@
 package moco
 
 import (
+	"regexp"
 	"strings"
 )
 
@@ -11,14 +12,15 @@ const (
 	BniIndexNumberAmount         = 6
 )
 
-var BniBlacklist = []string{"DARI", "TRANSFER", "Sdr", "|"}
+var BniBlacklist = []string{"DARI", "TRANSFER", "Sdr", "|", "PEMINDAHAN"}
 
 type bniParser struct {
-	record      []string
-	accountName string
-	description string
-	amount      string
-	date        string
+	record        []string
+	accountName   string
+	accountNumber string
+	description   string
+	amount        string
+	date          string
 }
 
 func (p *bniParser) validRecordLength() bool {
@@ -28,9 +30,8 @@ func (p *bniParser) validRecordLength() bool {
 func (p *bniParser) parseRecord() error {
 	d := p.record[BniIndexNumberDescription]
 	p.description = d
-	ns := WhitespaceSplit(d)
-	ns = BlacklistTrim(ns, BniBlacklist)
-	p.accountName = p.parseAccountName(ns)
+	p.accountName = p.parseAccountName(d)
+	p.accountNumber = p.parseAccountNumber(d)
 	p.amount = p.record[BniIndexNumberAmount]
 	date := p.record[BniIndexNumberValidationDate]
 	p.date = p.parseDate(date)
@@ -38,12 +39,44 @@ func (p *bniParser) parseRecord() error {
 	return nil
 }
 
-func (p *bniParser) parseAccountName(ns []string) string {
-	if len(ns) > 1 {
-		return strings.Join(ns, " ")
+func (p *bniParser) parseAccountName(s string) string {
+	ns := WhitespaceSplit(s)
+	ns = BlacklistTrim(ns, BniBlacklist)
+
+	an := make([]string, 0)
+
+	for _, v := range ns {
+		if !p.isAllNumber(v) {
+			an = append(an, v)
+		}
+	}
+
+	if len(an) > 1 {
+		return strings.Join(an, " ")
 	}
 
 	return ""
+}
+
+func (p *bniParser) parseAccountNumber(s string) string {
+	ns := WhitespaceSplit(s)
+	ns = BlacklistTrim(ns, BniBlacklist)
+	for _, v := range ns {
+		if p.isAllNumber(v) {
+			return v
+		}
+	}
+
+	return ""
+}
+
+func (p *bniParser) isAllNumber(s string) bool {
+	match, err := regexp.MatchString("^[0-9]*$", s)
+	if err != nil {
+		return false
+	}
+
+	return match
 }
 
 func NewBniParser() MutationParser {
@@ -55,11 +88,11 @@ func (p *bniParser) GetAccountName() string {
 }
 
 func (p *bniParser) GetAccountNumber() string {
-	//Not implemented
-	return ""
+	return p.accountNumber
 }
 
 func (p *bniParser) LoadRecord(record []string) error {
+	p.cleanUp()
 	p.record = record
 	if !p.validRecordLength() {
 		return nil
@@ -93,4 +126,12 @@ func (p *bniParser) parseDate(s string) string {
 	}
 
 	return ""
+}
+
+func (p *bniParser) cleanUp() {
+	p.accountName = ""
+	p.accountNumber = ""
+	p.description = ""
+	p.amount = ""
+	p.date = ""
 }

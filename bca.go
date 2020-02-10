@@ -125,6 +125,7 @@ func (p *bcaParser) GetAccountNumber() string {
 }
 
 func (p *bcaParser) LoadRecord(record []string) error {
+	p.cleanUp()
 	p.record = record
 	if !p.validRecordLength() {
 		return nil
@@ -149,4 +150,11 @@ func (p *bcaParser) GetAmount() string {
 
 func (p *bcaParser) GetDate() string {
 	return p.date
+}
+
+func (p *bcaParser) cleanUp() {
+	p.accountName = ""
+	p.description = ""
+	p.amount = ""
+	p.date = ""
 }
