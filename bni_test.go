@@ -43,7 +43,7 @@ func (suite *BniMutationTestSuite) TestGetAccountNumber() {
 	v := suite.parser.GetAccountNumber()
 
 	assert.Nil(suite.T(), err, "Error should be nil")
-	assert.Equal(suite.T(), "", v, "Account number is not empty")
+	assert.Equal(suite.T(), "719147165", v, "Account number is empty")
 }
 
 func (suite *BniMutationTestSuite) TestGetAmount() {
