@@ -15,7 +15,7 @@ type BniMutationTestSuite struct {
 }
 
 func (suite *BniMutationTestSuite) SetupTest() {
-	suite.BniMutationRec = []string{"02/12/19 06.25.21", "02/12/19 06.25.21", "0996", "932902", "TRANSFER DARI   | Sdr JOHN DOE", ".00", "200,000.00"}
+	suite.BniMutationRec = []string{"02/12/19 06.25.21", "02/12/19 06.25.21", "0996", "932902", "TRANSFER DARI | PEMINDAHAN DARI 719147165 Sdr JOHN DOE", ".00", "200,000.00"}
 	suite.InvalidBniMutationRec = []string{"test", "invalid", "record"}
 	suite.parser = NewBniParser()
 }
@@ -43,7 +43,7 @@ func (suite *BniMutationTestSuite) TestGetAccountNumber() {
 	v := suite.parser.GetAccountNumber()
 
 	assert.Nil(suite.T(), err, "Error should be nil")
-	assert.Equal(suite.T(), "", v, "Account number is not empty")
+	assert.Equal(suite.T(), "719147165", v, "Account number is empty")
 }
 
 func (suite *BniMutationTestSuite) TestGetAmount() {
@@ -59,7 +59,7 @@ func (suite *BniMutationTestSuite) TestGetDescription() {
 	v := suite.parser.GetDescription()
 
 	assert.Nil(suite.T(), err, "Error should be nil")
-	assert.Equal(suite.T(), "TRANSFER DARI   | Sdr JOHN DOE", v, "Description is wrong")
+	assert.Equal(suite.T(), "TRANSFER DARI | PEMINDAHAN DARI 719147165 Sdr JOHN DOE", v, "Description is wrong")
 }
 
 func (suite *BniMutationTestSuite) TestGetDate() {
