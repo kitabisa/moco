@@ -1,4 +1,6 @@
 # moco
+[![Coverage Status](https://coveralls.io/repos/github/kitabisa/moco/badge.svg?branch=master)](https://coveralls.io/github/kitabisa/moco?branch=master)
+
 moco/mo·co/ - Membaca
  
 Library to parse Bank mutation CSV and extract information from it.
