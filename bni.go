@@ -12,7 +12,7 @@ const (
 	BniIndexNumberAmount         = 6
 )
 
-var BniBlacklist = []string{"DARI", "TRANSFER", "Sdr", "|", "PEMINDAHAN"}
+var BniBlacklist = []string{"DARI", "TRANSFER", "Sdr", "Sdri", "|", "PEMINDAHAN"}
 
 type bniParser struct {
 	record        []string
@@ -31,7 +31,7 @@ func (p *bniParser) parseRecord() error {
 	d := p.record[BniIndexNumberDescription]
 	p.description = d
 	p.accountName = p.parseAccountName(d)
-	p.accountNumber = p.parseAccountNumber(d)
+	// p.accountNumber = p.parseAccountNumber(d) // new bni csv doesn't include bank account number
 	p.amount = p.record[BniIndexNumberAmount]
 	date := p.record[BniIndexNumberValidationDate]
 	p.date = p.parseDate(date)
@@ -46,6 +46,7 @@ func (p *bniParser) parseAccountName(s string) string {
 	an := make([]string, 0)
 
 	for _, v := range ns {
+		v = strings.ReplaceAll(v, "|", "")
 		if !p.isAllNumber(v) {
 			an = append(an, v)
 		}
