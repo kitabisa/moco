@@ -22,9 +22,25 @@ func TestBlacklistTrim(t *testing.T) {
 }
 
 func TestNumericTrim(t *testing.T) {
-	s := "100.000"
+	s := "100,000.00"
 	v, err := NumericTrim(s)
 
 	assert.Nil(t, err, "Error should be nil")
 	assert.Equal(t, "100000", v, "Numeric value is wrong")
+}
+
+func TestNumericHundreds(t *testing.T) {
+	s := "100,300.00"
+	v, err := NumericTrim(s)
+
+	assert.Nil(t, err, "Error should be nil")
+	assert.Equal(t, "100300", v, "Numeric value is wrong")
+}
+
+func TestNumericDozens(t *testing.T) {
+	s := "100,370.00"
+	v, err := NumericTrim(s)
+
+	assert.Nil(t, err, "Error should be nil")
+	assert.Equal(t, "100370", v, "Numeric value is wrong")
 }
