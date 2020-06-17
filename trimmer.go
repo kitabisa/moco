@@ -33,7 +33,7 @@ func BlacklistTrim(ar, blacklist []string) []string {
 }
 
 func NumericTrim(s string) (string, error) {
-	s = strings.Replace(s, ",00", "", -1)
+	s = strings.Replace(s, ".00", "", -1)
 	reg, err := regexp.Compile("[^0-9]+")
 	if err != nil {
 		return "", err
